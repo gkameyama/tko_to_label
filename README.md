@@ -1,13 +1,13 @@
-# TKO to Label XLSX
+# 太閤 to Label XLSX
 
-TKOファイルからラベル一覧のExcelファイル（`.xlsx`）を作成するツールです。
+太閤ファイル（`.TKO` または `.xls`）からラベル一覧のExcelファイル（`.xlsx`）を作成するツールです。
 
 ## ファイル構成
 
 - `tko_to_label_xlsx.py`: 変換処理本体
 - `run_gui.bat`: GUIダイアログ付きで実行するバッチファイル
 
-> `.TKO` および `.xlsx` ファイルは `.gitignore` により管理対象外です。
+> `.TKO`、`.xls` および `.xlsx` ファイルは `.gitignore` により管理対象外です。
 
 ## 必要環境
 
@@ -23,7 +23,7 @@ pip install xlrd openpyxl
 
 `run_gui.bat` をダブルクリックしてください。
 
-1. TKOファイル選択ダイアログで入力 `.TKO` ファイルを選択します。
+1. 太閤ファイル選択ダイアログで入力 `.TKO` または `.xls` ファイルを選択します。
 2. 保存ダイアログで出力 `.xlsx` ファイル名を指定します。
 3. 変換が完了すると完了メッセージが表示されます。
 
@@ -43,13 +43,19 @@ python tko_to_label_xlsx.py ラベル2.TKO
 
 この場合、入力ファイルと同じ名前の `.xlsx` が作成されます。
 
+`.xls` ファイルも同じように指定できます。
+
+```bat
+python tko_to_label_xlsx.py ラベル2.xls
+```
+
 引数なしで実行する場合:
 
 ```bat
 python tko_to_label_xlsx.py
 ```
 
-スクリプトと同じフォルダに `.TKO` ファイルが1つだけある場合、そのファイルを入力として同名の `.xlsx` を作成します。
+スクリプトと同じフォルダに `.TKO` または `.xls` ファイルが1つだけある場合、そのファイルを入力として同名の `.xlsx` を作成します。
 
 ## 出力内容
 

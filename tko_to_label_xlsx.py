@@ -1,5 +1,5 @@
 """
-TKOファイルからラベル.xlsxを生成するスクリプト
+太閤ファイルからラベル.xlsxを生成するスクリプト
 
 ｼｽﾃﾑ管理シートが複数（ｼｽﾃﾑ管理、ｼｽﾃﾑ管理2、ｼｽﾃﾑ管理3…）あっても自動で処理します。
 処理前にカテゴリ数とカテゴリ名の個数（空文字除外）の整合性を検証し、
@@ -29,6 +29,7 @@ from openpyxl.utils import get_column_letter
 TYPE_MAP   = {'ＳＡ': 'SA', 'ＭＡ': 'MA', '数量': 'NU', '文字': 'TX'}
 COLUMNS    = ['列№', 'ラベル', '質問タイトル', 'タイプ', 'カテゴリ数', 'カテゴリ№', 'カテゴリ']
 INT_COLS   = {'列№', 'カテゴリ数', 'カテゴリ№'}
+INPUT_EXTENSIONS = ('.tko', '.xls')
 
 # 出力シートの列幅
 COL_WIDTHS = {
@@ -314,22 +315,22 @@ def resolve_paths(args: list[str]) -> tuple[str, str]:
     script_dir = os.path.dirname(os.path.abspath(__file__))
 
     if len(args) == 0:
-        tko_files = [
+        input_files = [
             os.path.join(script_dir, name)
             for name in os.listdir(script_dir)
-            if name.lower().endswith('.tko')
+            if name.lower().endswith(INPUT_EXTENSIONS)
         ]
-        if len(tko_files) == 1:
-            input_path = tko_files[0]
+        if len(input_files) == 1:
+            input_path = input_files[0]
             output_path = os.path.splitext(input_path)[0] + '.xlsx'
             return input_path, output_path
 
-        if len(tko_files) == 0:
-            raise ValueError("同じフォルダに .TKO ファイルが見つかりません。")
+        if len(input_files) == 0:
+            raise ValueError("同じフォルダに .TKO または .xls ファイルが見つかりません。")
 
-        names = "\n".join(f"  - {os.path.basename(path)}" for path in tko_files)
+        names = "\n".join(f"  - {os.path.basename(path)}" for path in input_files)
         raise ValueError(
-            "同じフォルダに .TKO ファイルが複数あります。入力ファイルを指定してください。\n"
+            "同じフォルダに .TKO または .xls ファイルが複数あります。入力ファイルを指定してください。\n"
             + names
         )
 
@@ -353,9 +354,14 @@ def run_gui() -> int:
     root.withdraw()
 
     input_path = filedialog.askopenfilename(
-        title='TKOファイルを選択してください',
+        title='TKOまたはxlsファイルを選択してください',
         initialdir=script_dir,
-        filetypes=[('TKO files', '*.TKO'), ('All files', '*.*')],
+        filetypes=[
+            ('Input files', '*.TKO *.xls'),
+            ('TKO files', '*.TKO'),
+            ('Excel 97-2003 workbook', '*.xls'),
+            ('All files', '*.*'),
+        ],
     )
     if not input_path:
         return 0
